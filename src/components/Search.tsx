@@ -51,8 +51,7 @@ export const Search = () => {
           onBlur={() => {
             setTimeout(() => {
               if (inputRef.current) {
-                inputRef.current.classList.remove("fade-in");
-                inputRef.current.classList.add("fade-out");
+                inputRef.current.style.opacity = "0";
                 inputRef.current.addEventListener(
                   "animationend",
                   () => {
@@ -68,9 +67,8 @@ export const Search = () => {
           }}
           onFocus={() => {
             if (inputRef.current) {
-              inputRef.current.classList.remove("fade-out");
               inputRef.current.style.display = "block";
-              inputRef.current.classList.add("fade-in");
+              inputRef.current.style.opacity = "1";
             }
           }}
           type="text"
@@ -79,20 +77,20 @@ export const Search = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        <ul
+          ref={inputRef}
+          className="absolute w-full list-none self-start rounded bg-[#4BB3FD] shadow transition"
+        >
+          {cities?.map((city) => (
+            <li
+              key={city.lat}
+              className="m-1 cursor-pointer rounded-sm px-4 py-2 transition hover:bg-[#027BCE]"
+            >
+              {city.name}, {city.state ? city.state + "," : ""} {city.country}
+            </li>
+          ))}
+        </ul>
       </div>
-      <ul
-        ref={inputRef}
-        className="col-start-2 row-start-3 w-[calc(50%+4rem)] list-none self-start rounded bg-[#4BB3FD] shadow transition"
-      >
-        {cities?.map((city) => (
-          <li
-            key={city.lat}
-            className="m-1 cursor-pointer rounded-sm px-4 py-2 transition hover:bg-[#027BCE]"
-          >
-            {city.name}, {city.state ? city.state + "," : ""} {city.country}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 };
