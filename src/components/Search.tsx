@@ -1,8 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, createContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { APIKey } from "../apikey";
 import { TbMapSearch } from "react-icons/tb";
+import { Weather } from "./WeatherData";
 
 interface ISearchResponse {
   name: string;
@@ -34,9 +35,26 @@ function fetchCity(searchTerm: string) {
   );
 }
 
+export interface ICityCoord {
+  lat: number;
+  lon: number;
+}
+
+export let CityContext: any;
+
 export const Search = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [city, setCity] = useState<ICityCoord>({ lat: NaN, lon: NaN });
   const inputRef = useRef<HTMLUListElement>(null);
+
+  CityContext = createContext(city);
+
+  function setCityCoord(lat: number, lon: number) {
+    setCity({
+      lat: lat,
+      lon: lon,
+    });
+  }
 
   const { data: cities } = fetchCity(searchTerm);
 
@@ -52,16 +70,9 @@ export const Search = () => {
             setTimeout(() => {
               if (inputRef.current) {
                 inputRef.current.style.opacity = "0";
-                inputRef.current.addEventListener(
-                  "animationend",
-                  () => {
-                    if (inputRef.current)
-                      inputRef.current.style.display = "none";
-                  },
-                  {
-                    once: true,
-                  }
-                );
+                setTimeout(() => {
+                  if (inputRef.current) inputRef.current.style.display = "none";
+                }, 100);
               }
             }, 200);
           }}
@@ -83,6 +94,7 @@ export const Search = () => {
         >
           {cities?.map((city) => (
             <li
+              onClick={() => setCityCoord(city.lat, city.lon)}
               key={city.lat}
               className="m-1 cursor-pointer rounded-sm px-4 py-2 transition hover:bg-[#027BCE]"
             >
@@ -91,6 +103,9 @@ export const Search = () => {
           ))}
         </ul>
       </div>
+      <CityContext.Provider value={city}>
+        <Weather />
+      </CityContext.Provider>
     </div>
   );
 };
