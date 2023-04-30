@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color: dodgerblue;
+  background-color: #15094e;
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+}
+
 .icon-class {
-  @apply h-24 w-24;
+  @apply  h-[4.5rem] w-20 mr-2;
+}
+
+.direction-class {
+  @apply h-16 w-16 mx-[-1rem] my-[-1rem];
 }
