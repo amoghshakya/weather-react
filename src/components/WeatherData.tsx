@@ -1,8 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
+import { ReactElement, useContext } from "react";
 import axios from "axios";
 import { APIKey } from "../apikey";
 import { CityContext, ICityCoord } from "./Search";
+import {
+  WiCloudy,
+  WiDayCloudy,
+  WiDayRain,
+  WiDayShowers,
+  WiDaySnow,
+  WiDaySunny,
+  WiDayThunderstorm,
+  WiNightAltRain,
+  WiNightAltShowers,
+  WiNightAltThunderstorm,
+  WiNightClear,
+  WiNightCloudy,
+  WiNightPartlyCloudy,
+  WiNightSnow,
+} from "react-icons/wi";
+import { TbMist } from "react-icons/tb";
 
 interface IWeatherResponse {
   coord: {
@@ -43,6 +60,30 @@ interface IWeatherResponse {
   name: string;
   cod: number;
 }
+
+interface WeatherIcons {
+  [key: string]: ReactElement;
+}
+
+const weatherIcons: WeatherIcons = {
+  _01d: <WiDaySunny className="icon-class" />,
+  _01n: <WiNightClear className="icon-class" />,
+  _02d: <WiDayCloudy className="icon-class" />,
+  _02n: <WiNightPartlyCloudy className="icon-class" />,
+  _03d: <WiCloudy className="icon-class" />,
+  _03n: <WiCloudy className="icon-class" />,
+  _04d: <WiDayCloudy className="icon-class" />,
+  _04n: <WiNightCloudy className="icon-class" />,
+  _09d: <WiDayShowers className="icon-class" />,
+  _09n: <WiNightAltShowers className="icon-class" />,
+  _10d: <WiDayRain className="icon-class" />,
+  _10n: <WiNightAltRain className="icon-class" />,
+  _11d: <WiDayThunderstorm className="icon-class" />,
+  _11n: <WiNightAltThunderstorm className="icon-class" />,
+  _13d: <WiDaySnow className="icon-class" />,
+  _13n: <WiNightSnow className="icon-class" />,
+  _50d: <TbMist className="icon-class" />,
+};
 
 const fetchWeather = (lat: number, lon: number) => {
   return useQuery(
@@ -86,6 +127,8 @@ export const Weather = () => {
     );
   }
 
+  let icon = "_" + weather?.weather[0].icon;
+
   return (
     <div className="col-start-2 row-start-3">
       <h1>
@@ -93,8 +136,10 @@ export const Weather = () => {
       </h1>
       <p>{weather && "Temp: " + weather?.main.temp + "°C"}</p>
       <p>{weather && "Feels like: " + weather?.main.feels_like + "°C"}</p>
+      <p>{weather && "Weather: " + weather.weather[0].description}</p>
       <p>{weather && "Humidity: " + weather?.main.humidity}</p>
-      <p>{weather && "Pressure: " + weather?.main.pressure}</p>
+      {weatherIcons[icon]}
+      <p>{weather && "Pressure: " + weather?.main.pressure + "hPa"}</p>
       <p>{weather && "Min Temp: " + weather?.main.temp_min + "°C"}</p>
       <p>{weather && "Max Temp: " + weather?.main.temp_max + "°C"}</p>
       <p>{weather && "Sunrise: " + timeConverter(weather.sys.sunrise)}</p>
