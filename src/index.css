@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,6 +6,11 @@
 :root {
   color: dodgerblue;
   background-color: #15094e;
+  font-family: Poppins, sans-serif;
+}
+
+h1 {
+  @apply text-4xl font-[800];
 }
 
 ::-webkit-scrollbar {
@@ -12,9 +18,9 @@
 }
 
 .icon-class {
-  @apply  h-[4.5rem] w-20 mr-2;
+  @apply  h-[4.5rem] w-max mr-2;
 }
 
 .direction-class {
-  @apply h-16 w-16 mx-[-1rem] my-[-1rem];
+  @apply h-[3.5rem] w-max ml-[-.5rem] mr-[-1rem] my-[-1rem];
 }

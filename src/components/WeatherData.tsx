@@ -3,6 +3,7 @@ import { ReactElement, useContext } from "react";
 import axios from "axios";
 import { APIKey } from "../apikey";
 import { CityContext, ICityCoord } from "./Search";
+import { BsClouds } from "react-icons/bs";
 import {
   WiBarometer,
   WiCloudy,
@@ -24,9 +25,11 @@ import {
   WiNightAltShowers,
   WiNightAltThunderstorm,
   WiNightClear,
-  WiNightCloudy,
   WiNightPartlyCloudy,
   WiNightSnow,
+  WiRaindrop,
+  WiSunrise,
+  WiSunset,
 } from "react-icons/wi";
 import { TbMist } from "react-icons/tb";
 
@@ -57,6 +60,7 @@ interface IWeatherResponse {
   clouds: {
     all: number;
   };
+  dt: number;
   sys: {
     type: number;
     id: number;
@@ -81,8 +85,8 @@ const weatherIcons: WeatherIcons = {
   _02n: <WiNightPartlyCloudy className="icon-class" />,
   _03d: <WiCloudy className="icon-class" />,
   _03n: <WiCloudy className="icon-class" />,
-  _04d: <WiDayCloudy className="icon-class" />,
-  _04n: <WiNightCloudy className="icon-class" />,
+  _04d: <BsClouds className="icon-class" />,
+  _04n: <BsClouds className="icon-class" />,
   _09d: <WiDayShowers className="icon-class" />,
   _09n: <WiNightAltShowers className="icon-class" />,
   _10d: <WiDayRain className="icon-class" />,
@@ -122,6 +126,7 @@ const fetchWeather = (lat: number, lon: number) => {
     },
     {
       enabled: Boolean(lat && lon),
+      refetchInterval: 60000,
     }
   );
 };
@@ -138,8 +143,9 @@ export const Weather = () => {
     hours = hours ? hours : 12;
     let minutes = date.getMinutes();
 
-    return hours + ":" + (minutes < 10 ? "0" : "") + minutes + ":" + meridiem;
+    return hours + ":" + (minutes < 10 ? "0" : "") + minutes + " " + meridiem;
   }
+  console.log(timeConverter(weather?.dt || 0));
 
   let icon = "_" + weather?.weather[0].icon;
 
@@ -169,13 +175,13 @@ export const Weather = () => {
     <div className="m-8 grid grid-cols-4 grid-rows-2 gap-4">
       {weather && (
         <>
-          <div className="col-start-1 row-start-1 flex flex-col gap-1 rounded-lg px-3 py-2">
-            <h1 className="text-2xl font-[800]">
+          <div className="col-start-1 row-start-1 flex flex-col gap-1 rounded-lg">
+            <h1 className="whitespace-nowrap">
               {weather.name}, {weather.sys.country}
             </h1>
             <div className="flex">
               <span>{weatherIcons[icon]}</span>
-              <span className="text-6xl">
+              <span className="self-center text-6xl">
                 {weather.main.temp.toPrecision(2) + "°C"}
               </span>
             </div>
@@ -185,17 +191,41 @@ export const Weather = () => {
                 weather.weather[0].description.slice(1)}
             </span>
           </div>
-          <div className="row-start-2 flex gap-1 px-3 py-2">
-            <span className="flex">
+          <div className="row-start-2 grid grid-cols-[max-content_max-content] grid-rows-[max-content_max-content] items-center">
+            <div
+              className="col-start-1 row-start-1 flex place-items-center gap-1"
+              title="Wind"
+            >
               {directionIcons[getDirection(weather.wind.deg)]}
-              {weather.wind.speed.toPrecision(2)}m/s{" "}
-              {getDirection(weather.wind.deg)}
-            </span>
-            ·
-            <span className="flex">
-              <WiBarometer className="h-10 w-10 my-[-.5rem]"/>
-              {weather.main.pressure} hPa
-            </span>
+              <span>{weather.wind.speed.toPrecision(2)}m/s </span>
+              <span className="font-bold">
+                {getDirection(weather.wind.deg)}
+              </span>
+            </div>
+            <div
+              className="col-start-2 row-start-1 flex place-items-center"
+              title="Pressure"
+            >
+              <WiBarometer className="h-10 w-auto" />
+              <span>{weather.main.pressure} hPa</span>
+            </div>
+            <div
+              className="col-start-1 row-start-2 flex place-items-center"
+              title="Humidity"
+            >
+              <WiRaindrop className="mx-[-1rem] my-[-1rem] ml-[-1.2rem] h-10 w-16 justify-end" />
+              <span>{weather.main.humidity}%</span>
+            </div>
+            <div className="col-start-1 row-start-3 flex flex-col">
+              <div className="flex" title="Sunrise">
+                <WiSunrise className="mr-2 h-6 w-max" />
+                <span>{timeConverter(weather.sys.sunrise)}</span>
+              </div>
+              <div className="flex" title="Sunset">
+                <WiSunset className="mr-2 h-6 w-max" />
+                <span>{timeConverter(weather.sys.sunset)}</span>
+              </div>
+            </div>
           </div>
         </>
       )}

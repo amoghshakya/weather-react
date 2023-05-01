@@ -61,7 +61,7 @@ export const Search = () => {
   return (
     <>
       <div className="grid h-auto grid-cols-[10vw_1fr_10vw] grid-rows-[10vw_auto_1fr] place-items-center">
-        <h1 className="col-start-2 row-start-1 m-4 text-4xl">
+        <h1 className="col-start-2 row-start-1 m-4 text-3xl font-normal">
           Weather Search
         </h1>
         <div className="relative col-start-2 row-start-2 w-[calc(50%+4rem)] ">
