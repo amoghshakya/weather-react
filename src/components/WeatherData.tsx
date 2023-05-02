@@ -145,7 +145,6 @@ export const Weather = () => {
 
     return hours + ":" + (minutes < 10 ? "0" : "") + minutes + " " + meridiem;
   }
-  console.log(timeConverter(weather?.dt || 0));
 
   let icon = "_" + weather?.weather[0].icon;
 
