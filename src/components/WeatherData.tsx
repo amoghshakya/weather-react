@@ -74,6 +74,62 @@ interface IWeatherResponse {
   cod: number;
 }
 
+interface IHourlyWeatherResponse {
+  cod: string;
+  message: number;
+  cnt: number;
+  list: {
+    dt: number;
+    main: {
+      temp: number;
+      feels_like: number;
+      temp_min: number;
+      temp_max: number;
+      pressure: number;
+      sea_level: number;
+      grnd_level: number;
+      humidity: number;
+      temp_kf: number;
+    };
+    weather: {
+      id: number;
+      main: string;
+      description: string;
+      icon: number;
+    }[];
+    clouds: {
+      all: number;
+    };
+    wind: {
+      speed: number;
+      deg: number;
+      gust: number;
+    };
+    visibility: number;
+    pop: number;
+    rain: {
+      "3h": number;
+    };
+    sys: {
+      pod: string;
+    };
+    dt_txt: string;
+  }[];
+  city: {
+    id: number;
+    name: string;
+    coord: {
+      lat: number;
+      lon: number;
+    };
+    country: string;
+    population: number;
+    timezone: number;
+    sunrise: number;
+    sunset: number;
+  };
+}
+
 interface WeatherIcons {
   [key: string]: ReactElement;
 }
@@ -110,15 +166,11 @@ const directionIcons: WeatherIcons = {
   NW: <WiDirectionDownRight className="direction-class" />,
 };
 
-const fetchWeather = (lat: number, lon: number) => {
+const fetchCurrentWeather = (lat: number, lon: number) => {
   return useQuery(
     ["weather", lat, lon],
     async () => {
       const result = await axios.get<IWeatherResponse>(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric`
-      );
-
-      console.log(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric`
       );
 
@@ -131,9 +183,31 @@ const fetchWeather = (lat: number, lon: number) => {
   );
 };
 
+const fetchHourlyWeather = (lat: number, lon: number) => {
+  return useQuery(
+    ["hourlyWeather", lat, lon],
+    async () => {
+      const result = await axios.get<IHourlyWeatherResponse>(
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric`
+      );
+      console.log(
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}`
+      );
+      return result.data.list;
+    },
+    {
+      enabled: Boolean(lat && lon),
+      refetchInterval: 60000,
+    }
+  );
+};
+
 export const Weather = () => {
   const city: ICityCoord = useContext(CityContext);
-  const { data: weather } = fetchWeather(city.lat, city.lon);
+  const { data: weather } = fetchCurrentWeather(city.lat, city.lon);
+  const { data: hourlyWeather } = fetchHourlyWeather(city.lat, city.lon);
+
+  console.log(hourlyWeather);
 
   function timeConverter(unixTimeStamp: number) {
     let date = new Date(unixTimeStamp * 1000);
