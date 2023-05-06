@@ -18,7 +18,7 @@ function fetchCity(searchTerm: string) {
     ["city", searchTerm],
     async () => {
       const result = await axios.get<ISearchResponse[]>(
-        `http://api.openweathermap.org/geo/1.0/direct?q=${searchTerm}&limit=5&appid=${APIKey}`
+        `https://api.openweathermap.org/geo/1.0/direct?q=${searchTerm}&limit=5&appid=${APIKey}`
       );
 
       return result.data.map((city: ISearchResponse) => ({

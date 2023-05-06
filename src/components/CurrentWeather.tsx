@@ -116,7 +116,7 @@ const fetchCurrentWeather = (lat: number, lon: number) => {
     ["weather", lat, lon],
     async () => {
       const result = await axios.get<IWeatherResponse>(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric`
+        `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric`
       );
 
       return result.data;
