@@ -169,10 +169,10 @@ export const Weather = () => {
   let icon = "_" + weather?.weather[0].icon;
 
   return (
-    <div className="m-8 grid grid-cols-4 grid-rows-2 gap-4">
+    <div className="m-8 grid grid-cols-4 grid-rows-2 gap-4 max-md:grid-cols-2 max-md:grid-rows-8">
       {weather && (
         <>
-          <div className="col-start-1 row-start-1 flex flex-col gap-1 rounded-lg">
+          <div className="col-start-1 row-start-1 flex flex-col gap-1 rounded-lg" title="Current weather">
             <h1 className="whitespace-nowrap">
               {weather.name}, {weather.sys.country}
             </h1>

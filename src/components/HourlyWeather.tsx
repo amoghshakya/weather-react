@@ -113,7 +113,7 @@ export const HourlyWeather = () => {
     <>
       {hourlyWeather && (
         <div
-          className="col-span-4 col-start-2 row-span-2 row-start-1 flex snap-x snap-mandatory gap-2 overflow-auto scroll-smooth rounded p-2 shadow-gray-800"
+          className="col-span-3 col-start-2 row-span-2 row-start-1 max-md:col-start-1 max-md:col-span-2 max-md:row-start-4 max-md:row-span-4 flex snap-x snap-mandatory gap-2 overflow-auto scroll-smooth rounded p-2 shadow-gray-800"
           id="hourly"
           ref={divRef}
           onWheel={handleScroll}
@@ -121,7 +121,7 @@ export const HourlyWeather = () => {
         >
           {hourlyWeather.list.map((item) => (
             <div
-              className="m-1 flex w-48 flex-shrink-0 snap-start flex-col items-center justify-center gap-1 rounded-lg border border-[dodgerblue] hover:bg-[#111950] px-4 text-center"
+              className="m-1 flex w-48 flex-shrink-0 cursor-pointer snap-start flex-col items-center justify-center gap-1 rounded-lg border border-[dodgerblue] px-4 text-center hover:bg-[#111950]"
               key={item.dt_txt}
             >
               <span className="m-2">

@@ -61,7 +61,7 @@ export const Search = () => {
   return (
     <>
       <div className="grid h-auto grid-cols-[10vw_1fr_10vw] grid-rows-[10vw_auto_1fr] place-items-center">
-        <h1 className="col-start-2 row-start-1 m-4 text-3xl font-normal">
+        <h1 className="col-start-2 row-start-1 m-4 text-3xl font-normal ">
           Weather Search
         </h1>
         <div className="relative col-start-2 row-start-2 w-[calc(50%+4rem)] ">
@@ -86,19 +86,19 @@ export const Search = () => {
             }}
             type="text"
             placeholder="Search for a city..."
-            className="text-black hover:bg-[#3BA3ED] focus:bg-[#3BA3ED] my-2 w-full rounded bg-[#4BB3FD] px-2 py-2 pl-9 shadow shadow-gray-800 outline-none transition placeholder:text-gray-500"
+            className="my-2 w-full rounded bg-[#4BB3FD] px-2 py-2 pl-9 text-black shadow shadow-gray-800 outline-none transition placeholder:text-gray-500 hover:bg-[#3BA3ED] focus:bg-[#3BA3ED]"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <ul
             ref={inputRef}
-            className="text-black absolute w-full list-none self-start rounded bg-[#4BB3FD] shadow transition"
+            className="absolute w-full list-none self-start rounded bg-[#4BB3FD] text-black shadow transition"
           >
             {cities?.map((city) => (
               <li
                 onClick={() => setCityCoord(city.lat, city.lon)}
                 key={city.lat}
-                className="hover:bg-[#027BCE] m-1 cursor-pointer rounded-sm px-4 py-2 transition"
+                className="m-1 cursor-pointer rounded-sm px-4 py-2 transition hover:bg-[#027BCE]"
               >
                 {city.name}, {city.state ? city.state + "," : ""} {city.country}
               </li>
