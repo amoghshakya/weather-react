@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { APIKey } from "../apikey";
 import { TbMapSearch } from "react-icons/tb";
-import { Weather } from "./WeatherData";
+import { Weather } from "./CurrentWeather";
 
 interface ISearchResponse {
   name: string;

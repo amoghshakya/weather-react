@@ -17,6 +17,10 @@ h1 {
   width: 2px;
 }
 
+div#hourly .icon-class {
+  @apply h-[2.5rem] w-max;
+}
+
 .icon-class {
   @apply  h-[4.5rem] w-max mr-2;
 }
