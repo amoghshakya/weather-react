@@ -172,7 +172,7 @@ export const Weather = () => {
     <div className="m-8 grid grid-cols-4 grid-rows-2 gap-4 max-md:grid-cols-2 max-md:grid-rows-8">
       {weather && (
         <>
-          <div className="col-start-1 row-start-1 flex flex-col gap-1 rounded-lg" title="Current weather">
+          <div className="col-start-1 max-md:col-span-2 row-start-1 flex flex-col gap-1 rounded-lg" title="Current weather">
             <h1 className="whitespace-nowrap">
               {weather.name}, {weather.sys.country}
             </h1>
@@ -182,13 +182,13 @@ export const Weather = () => {
                 {weather.main.temp.toPrecision(2) + "°C"}
               </span>
             </div>
-            <span className="flex">
+            <span className="flex max-md:whitespace-nowrap">
               {"Feels like " + weather.main.feels_like.toPrecision(2) + "°C"} ·{" "}
               {weather.weather[0].description[0].toUpperCase() +
                 weather.weather[0].description.slice(1)}
             </span>
           </div>
-          <div className="row-start-2 grid grid-cols-[max-content_max-content] grid-rows-[max-content_max-content] items-center">
+          <div className="row-start-2 max-md:col-span-2 grid grid-cols-[max-content_max-content] grid-rows-[max-content_max-content] items-center">
             <div
               className="col-start-1 row-start-1 flex place-items-center gap-1"
               title="Wind"

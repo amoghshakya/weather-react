@@ -121,7 +121,7 @@ export const HourlyWeather = () => {
         >
           {hourlyWeather.list.map((item) => (
             <div
-              className="m-1 flex w-48 flex-shrink-0 cursor-pointer snap-start flex-col items-center justify-center gap-1 rounded-lg border border-[dodgerblue] px-4 text-center hover:bg-[#111950]"
+              className="m-1 flex w-48 max-md:p-2 flex-shrink-0 cursor-pointer snap-start flex-col items-center justify-center gap-1 rounded-lg border border-[dodgerblue] px-4 text-center hover:bg-[#111950]"
               key={item.dt_txt}
             >
               <span className="m-2">
