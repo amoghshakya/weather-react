@@ -3,7 +3,7 @@ import axios from "axios";
 import { APIKey } from "../apikey";
 import { CityContext, ICityCoord } from "./Search";
 import React, { useContext } from "react";
-import { timeConverter, weatherIcons } from "./CurrentWeather";
+import { weatherIcons } from "./CurrentWeather";
 import { useRef } from "react";
 
 interface IHourlyWeatherResponse {
@@ -66,14 +66,23 @@ const fetchHourlyWeather = (lat: number, lon: number) => {
   return useQuery(
     ["hourlyWeather", lat, lon],
     async () => {
-      const result = await axios.get<IHourlyWeatherResponse>(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric&cnt=14`
+      const weather = await axios.get<IHourlyWeatherResponse>(
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric&cnt=40`
       );
-      return result.data;
+      let list = weather.data.list;
+      let result = [];
+      let previousDt = null;
+      for (let obj of list) {
+        if (previousDt === null || obj.dt === previousDt + 86400) {
+          result.push(obj);
+          previousDt = obj.dt;
+        }
+      }
+      return result;
     },
     {
       enabled: Boolean(lat && lon),
-      refetchInterval: 60000,
+      refetchInterval: 300000,
     }
   );
 };
@@ -113,30 +122,32 @@ export const HourlyWeather = () => {
     <>
       {hourlyWeather && (
         <div
-          className="col-span-3 col-start-2 row-span-2 row-start-1 max-md:col-start-1 max-md:col-span-2 max-md:row-start-4 max-md:row-span-4 flex snap-x snap-mandatory gap-2 overflow-auto scroll-smooth rounded p-2 shadow-gray-800"
+          className="col-span-3 col-start-2 row-span-2 row-start-1 flex snap-x snap-mandatory gap-2 overflow-auto scroll-smooth rounded p-2 shadow-gray-800 max-md:col-span-2 max-md:col-start-1 max-md:row-span-4 max-md:row-start-4 md:mx-16"
           id="hourly"
           ref={divRef}
           onWheel={handleScroll}
-          title="3 hour forecast"
         >
-          {hourlyWeather.list.map((item) => (
+          {hourlyWeather.map((item) => (
             <div
-              className="m-1 flex w-48 max-md:p-2 flex-shrink-0 cursor-pointer snap-start flex-col items-center justify-center gap-1 rounded-lg border border-[dodgerblue] px-4 text-center hover:bg-[#111950]"
+              className="m-1 flex h-max w-40 flex-shrink-0 cursor-pointer snap-start flex-col items-center justify-center gap-1 rounded-lg border border-[dodgerblue] p-4 text-center hover:bg-[#111950] max-md:p-2 md:w-36"
               key={item.dt_txt}
+              title={
+                item.weather[0].description[0].toUpperCase() +
+                item.weather[0].description.slice(1)
+              }
             >
               <span className="m-2">
                 {weatherIcons["_" + item.weather[0].icon]}{" "}
               </span>
-              <span className="text-2xl">
+              <span className="text-xl">
                 {item.main.temp.toPrecision(2) + "°C"}
               </span>
-              <span className="whitespace-nowrap">
+              {/* <span className="whitespace-nowrap">
                 {item.weather[0].description[0].toUpperCase() +
                   item.weather[0].description.slice(1)}
-              </span>
+              </span> */}
               <div className="flex flex-col justify-center break-words text-center">
                 <span className="font-bold">{getDay(item.dt)}</span>
-                <span>{timeConverter(item.dt)}</span>
               </div>
             </div>
           ))}
