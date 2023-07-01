@@ -3,7 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { APIKey } from "../apikey";
 import { TbMapSearch } from "react-icons/tb";
+import { MdOutlineLocationOn } from "react-icons/md";
 import { Weather } from "./CurrentWeather";
+import { HourlyWeather } from "./HourlyWeather";
 
 interface ISearchResponse {
   name: string;
@@ -60,13 +62,13 @@ export const Search = () => {
 
   return (
     <>
-      <div className="grid h-auto grid-cols-[10vw_1fr_10vw] max-md:grid-rows-3 grid-rows-[10vw_auto_1fr] place-items-center max-md:mb-[-4rem]">
-        <h1 className="col-start-2 row-start-1 m-4 text-3xl font-normal">
+      <div className="grid grid-cols-3 grid-rows-2 place-items-center">
+        <h1 className="col-start-2 m-3 mt-6 whitespace-nowrap">
           Weather Search
         </h1>
-        <div className="relative col-start-2 row-start-2 w-[calc(50%+4rem)] ">
-          <TbMapSearch className="absolute left-3 top-5 stroke-black" />
+        <div className="relative col-start-2 row-start-2">
           <input
+            className="peer rounded-xl px-9 py-2 text-gray-500 shadow outline-none transition-all focus:rounded-2xl focus:bg-gray-300 focus:text-black"
             onBlur={() => {
               setTimeout(() => {
                 if (inputRef.current) {
@@ -86,29 +88,33 @@ export const Search = () => {
             }}
             type="text"
             placeholder="Search for a city..."
-            className="my-2 w-full rounded bg-[#4BB3FD] px-2 py-2 pl-9 text-black shadow shadow-gray-800 outline-none transition placeholder:text-gray-500 hover:bg-[#3BA3ED] focus:bg-[#3BA3ED]"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <TbMapSearch className="absolute left-2 top-2 h-3/5 stroke-gray-500 peer-focus:stroke-gray-700" />
           <ul
             ref={inputRef}
-            className="absolute w-full list-none self-start rounded bg-[#4BB3FD] text-black shadow transition"
+            className="absolute my-2 w-full list-none rounded-lg bg-slate-300 text-gray-800"
           >
             {cities?.map((city) => (
               <li
+                className=" relative mx-1 my-1 rounded px-8 py-2 hover:cursor-pointer hover:bg-slate-400 hover:text-black"
                 onClick={() => setCityCoord(city.lat, city.lon)}
                 key={city.lat}
-                className="m-1 cursor-pointer rounded-sm px-4 py-2 transition hover:bg-[#027BCE]"
               >
+                <MdOutlineLocationOn className="absolute left-2 top-[0.73rem]" />
                 {city.name}, {city.state ? city.state + "," : ""} {city.country}
               </li>
             ))}
           </ul>
         </div>
       </div>
-      <CityContext.Provider value={city}>
-        <Weather />
-      </CityContext.Provider>
+      <div className="w-full">
+        <CityContext.Provider value={city}>
+          <Weather />
+          <HourlyWeather />
+        </CityContext.Provider>
+      </div>
     </>
   );
 };

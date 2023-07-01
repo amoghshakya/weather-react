@@ -161,7 +161,6 @@ export function getDirection(degree: number) {
   }
 }
 
-
 export const Weather = () => {
   const city: ICityCoord = useContext(CityContext);
   const { data: weather } = fetchCurrentWeather(city.lat, city.lon);
@@ -169,64 +168,54 @@ export const Weather = () => {
   let icon = "_" + weather?.weather[0].icon;
 
   return (
-    <div className="m-8 grid grid-cols-4 grid-rows-2 gap-4 max-md:grid-cols-2 max-md:grid-rows-8">
+    <div>
       {weather && (
         <>
-          <div className="col-start-1 max-md:col-span-2 row-start-1 flex flex-col gap-1 rounded-lg" title="Current weather">
-            <h1 className="whitespace-nowrap">
+          <div className="grid w-auto grid-cols-1 grid-rows-3 place-items-center">
+            <h1 className="font-3xl col-start-1 row-start-1 whitespace-nowrap font-semibold">
               {weather.name}, {weather.sys.country}
             </h1>
-            <div className="flex">
+            <div className="col-start-1 row-start-2 flex">
               <span>{weatherIcons[icon]}</span>
-              <span className="self-center text-6xl">
+              <span className="text-6xl font-semibold">
                 {weather.main.temp.toPrecision(2) + "°C"}
               </span>
             </div>
-            <span className="flex max-md:whitespace-nowrap">
+            <span className="text-lg font-medium">
               {"Feels like " + weather.main.feels_like.toPrecision(2) + "°C"} ·{" "}
               {weather.weather[0].description[0].toUpperCase() +
                 weather.weather[0].description.slice(1)}
             </span>
           </div>
-          <div className="row-start-2 max-md:col-span-2 grid grid-cols-[max-content_max-content] grid-rows-[max-content_max-content] items-center">
-            <div
-              className="col-start-1 row-start-1 flex place-items-center gap-1"
-              title="Wind"
-            >
+          <div className="grid grid-cols-3 grid-rows-2 place-items-center m-auto whitespace-nowrap md:w-[35%]">
+            <div title="Wind" className="flex relative">
               {directionIcons[getDirection(weather.wind.deg)]}
-              <span>{weather.wind.speed.toPrecision(2)}m/s </span>
-              <span className="font-bold">
+              <span>{weather.wind.speed.toPrecision(2)}m/s</span>
+              <span className="font-bold ml-1">
                 {getDirection(weather.wind.deg)}
               </span>
             </div>
-            <div
-              className="col-start-2 row-start-1 flex place-items-center"
-              title="Pressure"
-            >
-              <WiBarometer className="h-10 w-auto" />
+            <div title="Pressure" className="flex relative">
+              <WiBarometer className="direction-class"/>
               <span>{weather.main.pressure} hPa</span>
             </div>
-            <div
-              className="col-start-1 row-start-2 flex place-items-center"
-              title="Humidity"
-            >
-              <WiRaindrop className="mx-[-1rem] my-[-1rem] ml-[-1.2rem] h-10 w-16 justify-end" />
+            <div title="Humidity" className="flex relative">
+              <WiRaindrop className="direction-class"/>
               <span>{weather.main.humidity}%</span>
             </div>
-            <div className="col-start-1 row-start-3 flex flex-col">
-              <div className="flex" title="Sunrise">
-                <WiSunrise className="mr-2 h-6 w-max" />
+            <div className="">
+              <div title="Sunrise" className="flex relative">
+                <WiSunrise className="direction-class"/>
                 <span>{timeConverter(weather.sys.sunrise)}</span>
               </div>
-              <div className="flex" title="Sunset">
-                <WiSunset className="mr-2 h-6 w-max" />
+              <div title="Sunset" className="flex relative">
+                <WiSunset className="direction-class"/>
                 <span>{timeConverter(weather.sys.sunset)}</span>
               </div>
             </div>
           </div>
         </>
       )}
-      <HourlyWeather />
     </div>
   );
 };
