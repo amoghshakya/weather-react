@@ -6,6 +6,7 @@ import { TbMapSearch } from "react-icons/tb";
 import { MdOutlineLocationOn } from "react-icons/md";
 import { Weather } from "./CurrentWeather";
 import { HourlyWeather } from "./HourlyWeather";
+import { MdOutlineMyLocation } from "react-icons/md";
 
 interface ISearchResponse {
   name: string;
@@ -51,6 +52,14 @@ export const Search = () => {
 
   CityContext = createContext(city);
 
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setCityCoord(position.coords.latitude, position.coords.longitude);
+      });
+    }
+  }
+
   function setCityCoord(lat: number, lon: number) {
     setCity({
       lat: lat,
@@ -87,11 +96,15 @@ export const Search = () => {
               }
             }}
             type="text"
-            placeholder="Search for a city..."
+            placeholder="Search for a city...or find your location"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <TbMapSearch className="absolute left-2 top-2 h-3/5 stroke-gray-500 peer-focus:stroke-gray-700" />
+          <MdOutlineMyLocation
+            className="absolute right-3 top-3 cursor-pointer rounded-full hover:fill-gray-700"
+            onClick={getLocation}
+          />
           <ul
             ref={inputRef}
             className="absolute my-2 w-full list-none rounded-lg bg-slate-300 text-gray-800"
