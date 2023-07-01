@@ -32,7 +32,6 @@ import {
   WiSunset,
 } from "react-icons/wi";
 import { TbMist } from "react-icons/tb";
-import { HourlyWeather } from "./HourlyWeather";
 
 interface IWeatherResponse {
   coord: {
