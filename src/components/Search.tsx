@@ -4,9 +4,9 @@ import axios from "axios";
 import { APIKey } from "../apikey";
 import { TbMapSearch } from "react-icons/tb";
 import { MdOutlineLocationOn } from "react-icons/md";
-import { Weather } from "./CurrentWeather";
-import { HourlyWeather } from "./HourlyWeather";
 import { MdOutlineMyLocation } from "react-icons/md";
+import { Title } from "./Title";
+import { Weather } from "./Weather";
 
 interface ISearchResponse {
   name: string;
@@ -71,13 +71,12 @@ export const Search = () => {
 
   return (
     <>
-      <div className="grid grid-cols-3 grid-rows-2 place-items-center">
-        <h1 className="col-start-2 m-3 mt-6 whitespace-nowrap">
-          Weather Search
-        </h1>
-        <div className="relative col-start-2 row-start-2">
+      <div className="my-16 grid grid-cols-1 grid-rows-3 place-items-center items-center gap-4">
+        <Title />
+
+        <section className="relative row-span-2">
           <input
-            className="peer rounded-xl px-9 py-2 text-gray-500 shadow outline-none transition-all focus:rounded-2xl focus:bg-gray-300 focus:text-black"
+            className="search-bar peer w-full p-2 px-9 md:w-[40vw]"
             onBlur={() => {
               setTimeout(() => {
                 if (inputRef.current) {
@@ -105,28 +104,29 @@ export const Search = () => {
             className="absolute right-3 top-3 cursor-pointer rounded-full hover:fill-gray-700"
             onClick={getLocation}
           />
+
           <ul
             ref={inputRef}
-            className="absolute my-2 w-full list-none rounded-lg bg-slate-300 text-gray-800"
+            className="search-results absolute my-2 w-full rounded-lg bg-slate-300 text-gray-800"
           >
             {cities?.map((city) => (
               <li
-                className=" relative mx-1 my-1 rounded px-8 py-2 hover:cursor-pointer hover:bg-slate-400 hover:text-black"
+                className="search-list"
                 onClick={() => setCityCoord(city.lat, city.lon)}
                 key={city.lat}
               >
-                <MdOutlineLocationOn className="absolute left-2 top-[0.73rem]" />
+                {/* <MdOutlineLocationOn className="absolute left-[-1.2rem] top-1 mx-[-1]" /> */}
                 {city.name}, {city.state ? city.state + "," : ""} {city.country}
               </li>
             ))}
           </ul>
-        </div>
-      </div>
-      <div className="w-full">
-        <CityContext.Provider value={city}>
-          <Weather />
-          <HourlyWeather />
-        </CityContext.Provider>
+        </section>
+
+        <section className="w-full">
+          <CityContext.Provider value={city}>
+            <Weather />
+          </CityContext.Provider>
+        </section>
       </div>
     </>
   );

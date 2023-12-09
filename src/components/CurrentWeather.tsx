@@ -160,7 +160,7 @@ export function getDirection(degree: number) {
   }
 }
 
-export const Weather = () => {
+export const CurrentWeather = () => {
   const city: ICityCoord = useContext(CityContext);
   const { data: weather } = fetchCurrentWeather(city.lat, city.lon);
 
@@ -186,29 +186,29 @@ export const Weather = () => {
                 weather.weather[0].description.slice(1)}
             </span>
           </div>
-          <div className="grid grid-cols-3 grid-rows-2 place-items-center m-auto whitespace-nowrap md:w-[35%]">
-            <div title="Wind" className="flex relative">
+          <div className="m-auto grid grid-cols-3 grid-rows-2 place-items-center whitespace-nowrap md:w-[35%]">
+            <div title="Wind" className="relative flex">
               {directionIcons[getDirection(weather.wind.deg)]}
               <span>{weather.wind.speed.toPrecision(2)}m/s</span>
-              <span className="font-bold ml-1">
+              <span className="ml-1 font-bold">
                 {getDirection(weather.wind.deg)}
               </span>
             </div>
-            <div title="Pressure" className="flex relative">
-              <WiBarometer className="direction-class"/>
+            <div title="Pressure" className="relative flex">
+              <WiBarometer className="direction-class" />
               <span>{weather.main.pressure} hPa</span>
             </div>
-            <div title="Humidity" className="flex relative">
-              <WiRaindrop className="direction-class"/>
+            <div title="Humidity" className="relative flex">
+              <WiRaindrop className="direction-class" />
               <span>{weather.main.humidity}%</span>
             </div>
             <div className="">
-              <div title="Sunrise" className="flex relative">
-                <WiSunrise className="direction-class"/>
+              <div title="Sunrise" className="relative flex">
+                <WiSunrise className="direction-class" />
                 <span>{timeConverter(weather.sys.sunrise)}</span>
               </div>
-              <div title="Sunset" className="flex relative">
-                <WiSunset className="direction-class"/>
+              <div title="Sunset" className="relative flex">
+                <WiSunset className="direction-class" />
                 <span>{timeConverter(weather.sys.sunset)}</span>
               </div>
             </div>

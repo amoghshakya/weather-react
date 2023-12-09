@@ -130,7 +130,7 @@ export const HourlyWeather = () => {
             <div
               className={
                 index === 0
-                  ? "hourly-class border-[dodgerblue] border"
+                  ? "hourly-class font-bold opacity-50 hover:cursor-default hover:bg-[#111950]"
                   : "hourly-class"
               }
               key={item.dt_txt}
