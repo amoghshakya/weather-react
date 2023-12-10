@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { APIKey } from "../apikey";
 import { TbMapSearch } from "react-icons/tb";
-import { MdOutlineLocationOn } from "react-icons/md";
 import { MdOutlineMyLocation } from "react-icons/md";
 import { Title } from "./Title";
 import { Weather } from "./Weather";
