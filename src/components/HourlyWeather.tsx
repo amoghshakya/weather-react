@@ -3,64 +3,11 @@ import axios from "axios";
 import { APIKey } from "../apikey";
 import { CityContext, ICityCoord } from "./Search";
 import React, { useContext } from "react";
-import { weatherIcons } from "./CurrentWeather";
+import { weatherIcons } from "./assets/icons";
 import { useRef } from "react";
+import { IHourlyWeatherResponse } from "./assets/interfaces";
+import { getDay } from "./assets/functions";
 
-interface IHourlyWeatherResponse {
-  cod: string;
-  message: number;
-  cnt: number;
-  list: {
-    dt: number;
-    main: {
-      temp: number;
-      feels_like: number;
-      temp_min: number;
-      temp_max: number;
-      pressure: number;
-      sea_level: number;
-      grnd_level: number;
-      humidity: number;
-      temp_kf: number;
-    };
-    weather: {
-      id: number;
-      main: string;
-      description: string;
-      icon: number;
-    }[];
-    clouds: {
-      all: number;
-    };
-    wind: {
-      speed: number;
-      deg: number;
-      gust: number;
-    };
-    visibility: number;
-    pop: number;
-    rain: {
-      "3h": number;
-    };
-    sys: {
-      pod: string;
-    };
-    dt_txt: string;
-  }[];
-  city: {
-    id: number;
-    name: string;
-    coord: {
-      lat: number;
-      lon: number;
-    };
-    country: string;
-    population: number;
-    timezone: number;
-    sunrise: number;
-    sunset: number;
-  };
-}
 
 const fetchHourlyWeather = (lat: number, lon: number) => {
   return useQuery(
@@ -69,15 +16,20 @@ const fetchHourlyWeather = (lat: number, lon: number) => {
       const weather = await axios.get<IHourlyWeatherResponse>(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric&cnt=40`
       );
+      // since we can only fetch weather hourly and not on daily basis
+      // we separate it by hours or (86400 seconds i.e., 24 hours)
       let list = weather.data.list;
       let result = [];
       let previousDt = null;
+
       for (let obj of list) {
+        // only push weather of the time that is exactly 24 hours away from current weather (i.e., next day)
         if (previousDt === null || obj.dt === previousDt + 86400) {
           result.push(obj);
           previousDt = obj.dt;
         }
       }
+
       return result;
     },
     {
@@ -87,29 +39,15 @@ const fetchHourlyWeather = (lat: number, lon: number) => {
   );
 };
 
-function getDay(unixTimeStamp: number) {
-  let date = new Date(unixTimeStamp * 1000);
-  let day = date.getDay();
-
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-
-  return days[day];
-}
-
 export const HourlyWeather = () => {
   const city: ICityCoord = useContext(CityContext);
   const { data: hourlyWeather } = fetchHourlyWeather(city.lat, city.lon);
 
   const divRef = useRef<HTMLDivElement>(null);
 
+  // this function is supposed to allow us to horizontally scroll
+  // usually the whole thing fits on the screen so this function is pointless
+  // only useful when the hourly weather thing wraps?
   function handleScroll(event: React.WheelEvent) {
     const element = divRef.current;
     if (element) {
