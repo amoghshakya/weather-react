@@ -7,3 +7,6 @@ This is a simple weather app that I created in ReactJS, TailwindCSS, and TypeScr
 - weather (lmao)
 - multi day forecast
 - responsiveness
+
+## Issues
+- CSS in Firefox 
